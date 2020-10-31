@@ -1,14 +1,18 @@
 int latchPin = 11;
 int clockPin = 9;
 int dataPin = 12;
-byte low = 0;
-byte high = 0;
-byte leds = 0;
-int num;
-void updateShiftRegister(unsigned int low, unsigned int high){
+byte first;
+byte second;
+byte third;
+
+
+
+void updateShiftRegister(){
   digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, LSBFIRST, low);
-  shiftOut(dataPin, clockPin, LSBFIRST, high);
+  
+  shiftOut(dataPin, clockPin, LSBFIRST, first);
+  shiftOut(dataPin, clockPin, LSBFIRST, second);  
+  shiftOut(dataPin, clockPin, LSBFIRST, third);  
   digitalWrite(latchPin, HIGH);
 }
 
@@ -18,98 +22,79 @@ void setup(){
   pinMode(latchPin, OUTPUT);
   pinMode(dataPin, OUTPUT);
   pinMode(clockPin, OUTPUT);
+  Serial.begin(9600);
+  
 }
 
-void one(){
-  high = 0b01100000;
-}
-
-void two(){
-  high = 0b11011011;
-}
-
-void three() {
-  high = 0b11110011;
-}
-
-void four() {
-  high = 0b01100111;
-}
-
-void five() {
-  high = 0b10110111;
-}
-
-void six() {
-  high = 0b10111111;
-}
-
-void seven(){
-  high = 0b11100000;
-}
-
-void eight(){
-  high = 0b11111111;
-}
-
-void nine() {
-  high = 0b11110111;  
-}
-
-void zero(){
-  high = 0b11111101;
-}
-
-void numberCheck(){
-  if (num==1){
-    one();
+void setNumber(int num){
+  if (num == 1){
+    third = 0b01100000;
+    second = 0b01100000;
   }
-  if (num==2){
-    two();
+
+  if (num == 2){
+    third = 0b11011011;
+    second = 0b11011011;
   }
-  if (num==3){
-    three();
+
+  if (num == 3){
+    third = 0b11110011;
+    second = 0b01100000;
   }
-  if (num==4){
-    four();
+
+  if (num == 4){
+    third = 0b01100111;;
+    second = 0b01100111;;
   }
-  if (num==5){
-    five();
+
+  if (num == 5){
+    third = 0b10110111;
+    second = 0b10110111;
   }
-  if (num==6){
-    six();
+
+  if (num == 6){
+    third = 0b10111111;
+    second = 0b10111111;
   }
-  if (num==7){
-    seven();
+
+  if (num == 7){
+    third = 0b11100001;
+    second = 0b11100001;
   }
-  if (num==8){
-    eight();
+  if (num == 8){
+    third = 0b11111111;
+    second = 0b11111111;
   }
-  if (num==9){
-    nine();
+  if (num == 9){
+    third = 0b11100111;
+    second = 0b11110111;
   }
-  if(num==0){
-    zero();
+  if (num == 0){
+    third = 0b11111101;
+    second = 0b11111101;
   }
 }
 
 void loop(){
-  low = 0b01111111;
-  one();
-  updateShiftRegister(low, high);
-  delay(1);
-  low = 0b10111111;
-  two();
-  updateShiftRegister(low, high);
-  delay(1);
-  low=0b11011111;
-  three();
-  updateShiftRegister(low, high);
-  delay(1);
-  low=0b11101111;
-  four();
-  updateShiftRegister(low, high);
-  delay(1);
   
-  
+  first = 0b01111111;
+  setNumber(2);
+  updateShiftRegister();
+  delay(1);
+  first = 0b10111111;
+  setNumber(3);
+  updateShiftRegister();
+  delay(1);
+  first = 0b11011111;
+  setNumber(4);
+  updateShiftRegister();
+  delay(1);
+  first = 0b11101111;
+  setNumber(5);
+  updateShiftRegister();
+  delay(1);
+  first = 0b11110111;
+  setNumber(0);
+  updateShiftRegister();
+  delay(1);
 }
